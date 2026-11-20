@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Newsroom League للطلاب</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Readex+Pro:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Control-room world: ink background, on-air red, signal amber, feed teal. Single dark theme by choice. */
+  --ink:#0d1420; --panel:#162131; --panel2:#1d2a3d; --line:#2a3a52;
+  --text:#eef2f7; --muted:#9aa8bc; --red:#e2364b; --amber:#f4a259; --teal:#22b3a2;
+  --good:#3ccf8e; --bad:#ff6b6b;
+  --display:"Readex Pro","IBM Plex Sans Arabic",system-ui,sans-serif;
+  --body:"IBM Plex Sans Arabic",system-ui,"Segoe UI",Tahoma,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--ink);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.55}
+button,input,select{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding:16px}
+header.top{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line);background:#0b111b;position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:10px}
+.onair{background:var(--red);color:#fff;font-family:var(--display);font-size:12px;letter-spacing:.08em;padding:3px 8px;border-radius:4px}
+.brand h1{font-size:20px}
+nav{display:flex;flex-wrap:wrap;gap:6px}
+nav a{color:var(--muted);text-decoration:none;padding:7px 12px;border-radius:999px;border:1px solid var(--line);font-size:14px}
+nav a[aria-current="page"]{background:var(--text);color:var(--ink);border-color:var(--text)}
+nav a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+section.view{display:none}
+section.view.on{display:block}
+.lead{color:var(--muted);max-width:70ch;margin:6px 0 18px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.card h3{font-size:17px;margin-bottom:8px}
+.btn{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--red);border-color:var(--red);color:#fff;font-weight:700}
+.btn.ghost{background:transparent}
+.btn.sm{padding:4px 10px;font-size:14px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pill{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.pill.off{color:var(--teal);border-color:var(--teal)}
+.pill.pr{color:var(--amber);border-color:var(--amber)}
+.pill.hy{color:var(--muted)}
+.note{font-size:13px;color:var(--muted)}
+label{display:block;font-size:14px;color:var(--muted);margin:10px 0 4px}
+select,input[type=number],input[type=text]{width:100%;background:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.num{font-variant-numeric:tabular-nums}
+/* leaderboard */
+.team{display:grid;grid-template-columns:34px 1fr auto auto;gap:10px;align-items:center;padding:10px 12px;border-radius:10px;background:var(--panel2);border:1px solid var(--line)}
+.team .rank{font-family:var(--display);font-size:20px;color:var(--muted);text-align:center}
+.team.first .rank{color:var(--amber)}
+.team input{background:transparent;border:none;padding:4px 0;font-weight:700}
+.team .score{font-family:var(--display);font-size:26px;min-width:64px;text-align:center}
+.teams{display:grid;gap:8px}
+.timer{font-family:var(--display);font-size:72px;text-align:center;font-variant-numeric:tabular-nums;line-height:1.1;margin:8px 0}
+.timer.done{color:var(--red)}
+/* myth */
+.stmt{font-family:var(--display);font-size:24px;line-height:1.45;min-height:3em;margin:8px 0 16px}
+.verdict{padding:12px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);margin-top:12px}
+.verdict.ok{border-color:var(--good)} .verdict.no{border-color:var(--bad)}
+.big2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.big2 .btn{font-size:20px;padding:16px;font-family:var(--display)}
+/* bars */
+.bar{height:12px;background:var(--panel2);border-radius:6px;overflow:hidden}
+.bar>span{display:block;height:100%;background:var(--teal)}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:10px 0}
+.kpi div{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px}
+.kpi b{display:block;font-family:var(--display);font-size:22px;font-variant-numeric:tabular-nums}
+.kpi small{color:var(--muted)}
+ul.why{margin:8px 0 0;padding-inline-start:18px}
+ul.why li{margin:4px 0}
+.good{color:var(--good)} .bad{color:var(--bad)} .warn{color:var(--amber)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+th{color:var(--muted);font-weight:500}
+.tablebox{overflow-x:auto}
+svg text{fill:var(--muted);font-family:var(--body)}
+.chartbox{background:var(--panel2);border-radius:10px;padding:8px;cursor:crosshair}
+.abv{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.abv .card{background:var(--panel2)}
+.abv .card.pick{border-color:var(--amber)}
+
+.scorebar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:8px 16px;background:#0f1724;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:4}
+.scorebar b{font-family:var(--display);font-size:20px;color:var(--amber)}
+dialog{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:16px;padding:22px;max-width:360px;width:90%}
+dialog::backdrop{background:rgba(0,0,0,.7)}
+.rcard{display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center}
+.rcard .big{font-family:var(--display);font-size:64px;color:var(--amber);line-height:1.1}
+a.btn{text-decoration:none;color:var(--text);display:block}
+header.top{position:static}
+
+@media (max-width:520px){.big2{grid-template-columns:1fr}.abv{grid-template-columns:1fr}.stmt{font-size:20px}.timer{font-size:56px}}
+@media (prefers-reduced-motion:no-preference){.bar>span{transition:width .6s ease}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="onair">ON AIR</span><h1>دوري غرف الأخبار</h1></div>
+  <nav aria-label="أقسام اللعبة">
+    <a href="#start">البداية</a>
+    <a href="#myth">حقيقة أم أسطورة</a>
+    <a href="#sim">محاكي التوزيع</a>
+    <a href="#ads">لعبة الميزانية</a>
+    <a href="#metrics">احسبها</a>
+    <a href="#retention">محقق الاحتفاظ</a>
+    <a href="#ab">من فاز؟</a>
+  </nav>
+</header>
+<div class="scorebar" id="scorebar"><span>نقاطي: <b class="num" id="myPts">0</b></span><span id="myWho" class="note"></span><button class="btn sm" id="cardBtn" type="button">بطاقة النتيجة</button></div>
+<dialog id="cardDlg"><div class="rcard"><span class="onair">ON AIR</span><h3 id="cName"></h3><p class="note" id="cTeam"></p><div class="big num" id="cTotal"></div><div id="cBreak" class="note"></div><button class="btn" type="button" id="cardClose">إغلاق</button></div></dialog>
+
+<main class="wrap">
+
+<!-- ================= START ================= -->
+<section class="view" id="v-start">
+  <h2>أهلاً بكم في دوري غرف الأخبار</h2>
+  <p class="lead">اكتب اسمك وفريقك، ثم العب الجولات التي يطلبها المحاضر. نقاطك تُجمع على هاتفك، وفي نهاية الجولة اعرض بطاقة نتيجتك على فريقك أو المحاضر.</p>
+  <div class="grid g2">
+    <div class="card">
+      <label for="meName">اسمك</label><input type="text" id="meName" autocomplete="off">
+      <label for="meTeam">فريقك (غرفة الأخبار)</label><input type="text" id="meTeam" autocomplete="off">
+      <div class="row" style="margin-top:12px"><button class="btn primary" id="meSave" type="button">حفظ وابدأ</button></div>
+      <p class="note" id="meMsg" aria-live="polite"></p>
+    </div>
+    <div class="card">
+      <h3>الجولات</h3>
+      <div class="grid" style="gap:8px">
+        <a class="btn" href="#myth">حقيقة أم أسطورة · 5 نقاط لكل إجابة صحيحة</a>
+        <a class="btn" href="#sim">محاكي التوزيع · حتى 10 نقاط لكل أصل</a>
+        <a class="btn" href="#ads">لعبة الميزانية · حتى 10 نقاط لكل مهمة</a>
+        <a class="btn" href="#metrics">احسبها · 3 نقاط لكل إجابة صحيحة</a>
+        <a class="btn" href="#retention">محقق الاحتفاظ · 5 نقاط لكل تشخيص</a>
+        <a class="btn" href="#ab">من فاز؟ · 5 نقاط لكل إجابة صحيحة</a>
+      </div>
+      <p class="note">كل الأرقام في الألعاب افتراضية لأغراض التدريب.</p>
+    </div>
+  </div>
+</section>
+<!-- ================= MYTH ================= -->
+<section class="view" id="v-myth">
+  <h2>حقيقة أم أسطورة؟</h2>
+  <p class="lead">جمل شائعة في غرف الأخبار عن المنصات والخوارزميات. صوّتوا ثم اكشفوا الجواب. لكل جواب وسم: رسمي (من المنصة) أو ممارسة مهنية.</p>
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <span class="pill" id="mCount">1 / 16</span>
+      <label for="mLevel" style="margin:0" class="note">الجولة</label>
+      <select id="mLevel" style="width:auto">
+        <option value="all">كل الجمل</option><option value="algo">الخوارزميات</option><option value="metrics">المؤشرات</option><option value="dist">التوزيع والإعلانات</option><option value="rules">السياسات</option>
+      </select>
+    </div>
+    <p class="stmt" id="mText"></p>
+    <div class="big2"><button class="btn" id="mFact">حقيقة</button><button class="btn" id="mMyth">أسطورة</button></div>
+    <div id="mOut"></div>
+    <div class="row" style="justify-content:space-between;margin-top:12px"><button class="btn" id="mPrev">السابق</button><span class="note num" id="mScore">صحيح: 0</span><button class="btn" id="mNext">التالي</button></div>
+  </div>
+</section>
+
+<!-- ================= SIM ================= -->
+<section class="view" id="v-sim">
+  <h2>محاكي التوزيع</h2>
+  <p class="lead">اختر قصة، ثم قرر أين وكيف ومتى تنشرها. المحاكي يعطي نتائج افتراضية من نموذج تعليمي مبسّط ليُظهر منطق القرار، وليس توقعاً حقيقياً لأداء أي منصة.</p>
+  <div class="grid g2">
+    <div class="card">
+      <label for="sScen">القصة (المهمة)</label><select id="sScen"></select>
+      <p class="note" id="sGoal"></p>
+      <label for="sPlat">المنصة</label><select id="sPlat"></select>
+      <label for="sFmt">الفورمات</label><select id="sFmt"></select>
+      <label for="sTime">التوقيت</label>
+      <select id="sTime"><option value="now">فوراً بعد التأكيد</option><option value="hour">بعد ساعة</option><option value="eve">مساء اليوم (ذروة النشاط)</option><option value="next">اليوم التالي</option></select>
+      <label for="sOpen">أول 3 ثوانٍ / أول سطر</label>
+      <select id="sOpen"><option value="hook">Hook قوي: أقوى لقطة أو سؤال مباشر</option><option value="ctx">جملة سياق واضحة لمن لا يعرف القصة</option><option value="logo">شعار المؤسسة + مقدمة</option><option value="bait">عنوان مثير غامض (لن تصدق…)</option></select>
+      <label for="sPack">التجهيز التقني</label>
+      <select id="sPack"><option value="native">نسخة مصممة للمنصة (أبعاد، نص على الشاشة، ترجمة)</option><option value="tv">ملف التلفزيون نفسه في كل مكان</option><option value="link">رابط مع ملخص</option></select>
+      <label for="sCta">CTA</label>
+      <select id="sCta"><option value="save">احفظ / أرسله لمن يهمه</option><option value="full">شاهد/اقرأ القصة كاملة</option><option value="follow">تابع للتحديثات</option><option value="none">بدون CTA</option></select>
+      <div class="row" style="margin-top:14px"><button class="btn primary" id="sRun">انشر الآن</button><button class="btn ghost" id="sLog">أضف للسجل</button></div>
+    </div>
+    <div class="card">
+      <h3>النتائج (افتراضية)</h3>
+      <div class="kpi" id="sKpi"></div>
+      <div id="sBars"></div>
+      <h3 style="margin-top:12px">لماذا؟</h3>
+      <ul class="why" id="sWhy"><li class="note">اختر ثم اضغط (انشر الآن).</li></ul>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h3>سجل خطة التوزيع</h3>
+    <div class="tablebox"><table><thead><tr><th>المنصة</th><th>الفورمات</th><th>التوقيت</th><th>Reach</th><th>الاحتفاظ</th><th>الدرجة</th></tr></thead><tbody id="sTable"></tbody></table></div>
+    <p class="note" id="sTotal"></p>
+  </div>
+</section>
+
+<!-- ================= ADS ================= -->
+<section class="view" id="v-ads">
+  <h2>لعبة الميزانية: 500$</h2>
+  <p class="lead">وزّع الميزانية على حملات. اختر لكل حملة المنصة والهدف الإعلاني. الأسعار والمعدلات افتراضية للتدريب فقط ومذكورة أسفل اللعبة.</p>
+  <div class="grid g2">
+    <div class="card">
+      <label for="aMission">المهمة</label><select id="aMission"></select>
+      <p class="note" id="aGoal"></p>
+      <div id="aLines"></div>
+      <div class="row" style="margin-top:10px;justify-content:space-between"><span class="num" id="aLeft"></span><button class="btn primary" id="aRun">أطلق الحملات</button></div>
+    </div>
+    <div class="card">
+      <h3>النتائج (افتراضية)</h3>
+      <div class="kpi" id="aKpi"></div>
+      <div class="tablebox"><table><thead><tr><th>الحملة</th><th>الإنفاق</th><th>الظهور</th><th>CPM</th><th>النتيجة الأساسية</th><th>تحقق الهدف؟</th></tr></thead><tbody id="aTable"></tbody></table></div>
+      <ul class="why" id="aWhy"></ul>
+    </div>
+  </div>
+  <details class="card" style="margin-top:14px"><summary>افتراضات النموذج (للشفافية)</summary>
+    <div class="tablebox" id="aAssume"></div>
+    <p class="note">كل حملة تخضع لتناقص العائد: كل دولار إضافي في الحملة نفسها يجلب أقل من سابقه. الأرقام لا تمثل أسعار أي سوق.</p>
+  </details>
+</section>
+
+<!-- ================= METRICS ================= -->
+<section class="view" id="v-metrics">
+  <h2>احسبها!</h2>
+  <p class="lead">سؤال حسابي جديد في كل مرة بأرقام افتراضية. أدخل الجواب (مقرّباً إلى منزلة عشرية واحدة).</p>
+  <div class="card">
+    <div class="row" style="justify-content:space-between"><span class="pill" id="qType"></span><span class="note num" id="qScore">0 / 0</span></div>
+    <p class="stmt" id="qText" style="font-size:20px"></p>
+    <div class="row"><input type="number" step="any" id="qAns" style="max-width:220px" aria-label="الجواب"><span id="qUnit" class="note"></span><button class="btn primary" id="qCheck">تحقق</button><button class="btn" id="qNew">سؤال جديد</button></div>
+    <div id="qOut"></div>
+  </div>
+</section>
+
+<!-- ================= RETENTION ================= -->
+<section class="view" id="v-retention">
+  <h2>محقق الاحتفاظ</h2>
+  <p class="lead">اضغط على المنحنى في اللحظة التي يفقد فيها الفيديو جمهوره بشكل حاد. ثم اكشف السبب.</p>
+  <div class="card">
+    <div class="row" style="justify-content:space-between"><label for="rCase" style="margin:0">الفيديو</label><select id="rCase" style="width:auto"></select></div>
+    <p class="note" id="rDesc"></p>
+    <div class="chartbox"><svg id="rSvg" viewBox="0 0 640 260" width="100%" role="img" aria-label="منحنى الاحتفاظ"></svg></div>
+    <div id="rOut" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- ================= AB ================= -->
+<section class="view" id="v-ab">
+  <h2>من فاز؟ تحدي A/B</h2>
+  <p class="lead">نسختان، ومقياس نجاح محدد مسبقاً. اختر الفائز أو (لا فرق واضح). البيانات افتراضية.</p>
+  <div class="card">
+    <div class="row" style="justify-content:space-between"><span class="pill" id="abN"></span><span class="note" id="abMetric"></span></div>
+    <h3 id="abQ" style="margin:10px 0"></h3>
+    <div class="abv" id="abV"></div>
+    <div class="row" style="margin-top:10px"><button class="btn" data-ab="A">A فازت</button><button class="btn" data-ab="B">B فازت</button><button class="btn" data-ab="0">لا فرق واضح</button><button class="btn ghost" id="abNext">التالي</button></div>
+    <div id="abOut"></div>
+  </div>
+</section>
+
+<p class="note" style="margin-top:24px">From Newsroom to Newsfeed · كل الأرقام في الألعاب افتراضية لأغراض التدريب. الوسم (رسمي) يعني أن المعلومة مستندة إلى ما تنشره المنصة؛ تحقق من المصادر الرسمية قبل التدريس لأن المنصات تتغير.</p>
+</main>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const fmt=n=>Math.round(n).toLocaleString('en-US');
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+/* ---------- routing ---------- */
+const views=['start','myth','sim','ads','metrics','retention','ab'];
+function route(){const h=(location.hash||'#start').slice(1);const v=views.includes(h)?h:'start';
+  views.forEach(x=>$('#v-'+x).classList.toggle('on',x===v));
+  $$('nav a').forEach(a=>a.toggleAttribute('aria-current',a.getAttribute('href')==='#'+v)); $$('nav a').forEach(a=>{if(a.hasAttribute('aria-current'))a.setAttribute('aria-current','page')});}
+addEventListener('hashchange',route);
+
+/* ---------- my score ---------- */
+let me=store.get('nl_me',{name:'',team:'',done:{}});
+const LBL={myth:'حقيقة أم أسطورة',sim:'محاكي التوزيع',ads:'لعبة الميزانية',calc:'احسبها',ret:'محقق الاحتفاظ',ab:'من فاز؟'};
+function total(){return Object.values(me.done).reduce((a,b)=>a+b,0)}
+function drawMe(){$('#myPts').textContent=total();$('#myWho').textContent=(me.name||'')+(me.team?' · '+me.team:'')}
+function award(key,pts,mode){if(mode==='max'){if((me.done[key]||0)>=pts)return false}else if(key in me.done)return false;me.done[key]=pts;store.set('nl_me',me);drawMe();return true}
+$('#meName').value=me.name;$('#meTeam').value=me.team;
+$('#meSave').onclick=()=>{me.name=$('#meName').value.trim();me.team=$('#meTeam').value.trim();store.set('nl_me',me);drawMe();$('#meMsg').textContent='تم الحفظ. اختر الجولة التي يطلبها المحاضر.'};
+$('#cardBtn').onclick=()=>{$('#cName').textContent=me.name||'لاعب';$('#cTeam').textContent=me.team||'بدون فريق';$('#cTotal').textContent=total();
+  const by={};Object.entries(me.done).forEach(([k,v])=>{const g=k.split('-')[0];by[g]=(by[g]||0)+v});
+  $('#cBreak').innerHTML=Object.entries(by).map(([g,v])=>`${LBL[g]||g}: ${v}`).join('<br>')||'لا نقاط بعد';
+  try{$('#cardDlg').showModal()}catch(e){$('#cardDlg').setAttribute('open','')}};
+$('#cardClose').onclick=()=>$('#cardDlg').close();
+/* ---------- myth or fact ---------- */
+const MYTHS=[
+ {c:'algo',t:'عدد متابعي الحساب عامل مباشر في توصية الفيديو على (لك) في تيك توك.',a:false,k:'off',e:'تعلن تيك توك أن عدد المتابعين وأداء الحساب السابق ليسا عاملاً مباشراً في التوصية؛ المهم تفاعلات المستخدم ومعلومات الفيديو.'},
+ {c:'algo',t:'لكل جزء في إنستغرام (الصفحة الرئيسية والقصص والاستكشاف والريلز) نظام ترتيب خاص به.',a:true,k:'off',e:'هذا ما يشرحه إنستغرام في مقال مقالها عن ترتيب المحتوى.'},
+ {c:'algo',t:'الحفظ (Save) يساوي رسمياً خمسة إعجابات في خوارزمية إنستغرام.',a:false,k:'pr',e:'لا تنشر أي منصة أوزاناً رقمية للإشارات. هذه الأرقام تخمينات متداولة.'},
+ {c:'algo',t:'نشر الرابط نفسه 10 مرات يومياً يضمن وصولاً أكبر.',a:false,k:'pr',e:'الأنظمة ترتّب كل منشور حسب القيمة المتوقعة، والمنشورات الضعيفة المتكررة تولّد إشارات سلبية وتتنافس فيما بينها.'},
+ {c:'algo',t:'يوتيوب يستخدم استبيانات للمستخدمين لقياس رضاهم، لا النقر فقط.',a:true,k:'off',e:'صفحة صفحة شرح عمل يوتيوب تذكر استبيانات الرضا ضمن إشارات التوصية.'},
+ {c:'algo',t:'ميتا تخفض توزيع المنشورات التي تستدرج التفاعل مثل (علّق بنعم إن كنت توافق).',a:true,k:'off',e:'مذكور ضمن أنواع المحتوى الذي يُخفض توزيعه في مركز الشفافية في ميتا (استدراج التفاعل).'},
+ {c:'metrics',t:'الوصول يمكن أن يكون أكبر من الظهور.',a:false,k:'off',e:'الوصول أشخاص مختلفون والظهور مرات عرض، فالانطباعات أكبر من الوصول أو تساويه.'},
+ {c:'metrics',t:'مليون مشاهدة على الشورتس تساوي مليون مشاهدة على فيديو يوتيوب طويل.',a:false,k:'off',e:'منذ 31 مارس 2025 تُحتسب مشاهدة الشورتس عند بدء التشغيل أو إعادته، وهذا يختلف عن الفيديو الطويل. لا تقارن المشاهدات مباشرة.'},
+ {c:'metrics',t:'معدل التفاعل  رقم ثابت لا يتغير مهما كان المقام.',a:false,k:'pr',e:'800 تفاعل = 1.6% على المتابعين و5% على الانطباعات و8% على الوصول. حدّد الصيغة دائماً.'},
+ {c:'metrics',t:'نسبة نقر عالية مع متوسط مشاهدة ضعيف جداً قد يعني أن العنوان وعد بأكثر مما قدّمه الفيديو.',a:true,k:'pr',e:'هذا تشخيص مهني شائع: النقر جيد والاحتفاظ ضعيف = الوعد أكبر من المحتوى أو المقدمة بطيئة.'},
+ {c:'dist',t:'قنوات واتساب تعرض للمسؤول أرقام هواتف المتابعين.',a:false,k:'off',e:'القنوات بث أحادي، ولا تكشف أرقام المتابعين للمسؤول.'},
+ {c:'dist',t:'الإعلان المدفوع يصلح المحتوى الضعيف.',a:false,k:'pr',e:'الإعلان يضخّم ما هو موجود. روّج لما أثبت جودته عضوياً.'},
+ {c:'dist',t:'إذا اخترت هدف مشاهدات الفيديو في الإعلان، سيحسّن النظام نحو المشاهدات لا نحو النقر إلى موقعك.',a:true,k:'off',e:'النظام يحسّن نحو الهدف الذي تختاره. لهدف الزيارات اختر الزيارات.'},
+ {c:'rules',t:'إذا نسبنا المقطع لصاحبه أصبح من حقنا نشره.',a:false,k:'off',e:'النسبة ليست ترخيصاً. اطلب الإذن ووثّقه.'},
+ {c:'rules',t:'قد يبقى المنشور منشوراً لكنه لا يُرشَّح لغير المتابعين بسبب سياسات أهلية التوصية.',a:true,k:'off',e:'ميتا وتيك توك وغيرهما تعلن أن بعض المحتوى مسموح لكنه غير مؤهل للتوصية. راقب حالة الحساب.'},
+ {c:'rules',t:'يوتيوب يسمح بمحتوى عنيف ذي سياق تعليمي أو وثائقي أو إخباري  مع قيود أحياناً.',a:true,k:'off',e:'سياق EDSA مذكور في إرشادات يوتيوب، وقد يُطبق تقييد العمر.'},
+];
+let mList=MYTHS,mI=0,mOk=0,mAns={};
+function mFilter(){const v=$('#mLevel').value;mList=v==='all'?MYTHS:MYTHS.filter(m=>m.c===v);mI=0;mAns={};mOk=0;drawMyth()}
+function drawMyth(){const m=mList[mI];$('#mCount').textContent=(mI+1)+' / '+mList.length;$('#mText').textContent=m.t;$('#mOut').innerHTML='';$('#mScore').textContent='صحيح: '+mOk;
+  if(mAns[mI]!==undefined)showMyth(mAns[mI],true)}
+function showMyth(choice,silent){const m=mList[mI];const right=choice===m.a;
+  if(!silent&&mAns[mI]===undefined){mAns[mI]=choice;if(right){mOk++;award('myth-'+MYTHS.indexOf(m),5)}else award('myth-'+MYTHS.indexOf(m),0)}
+  const tag=m.k==='off'?'<span class="pill off">رسمي</span>':'<span class="pill pr">ممارسة مهنية</span>';
+  $('#mOut').innerHTML=`<div class="verdict ${right?'ok':'no'}"><b class="${right?'good':'bad'}">${right?'إجابة صحيحة':'إجابة خاطئة'}</b> · الجواب: <b>${m.a?'حقيقة':'أسطورة'}</b> ${tag}<p style="margin:6px 0 0">${m.e}</p></div>`;
+  $('#mScore').textContent='صحيح: '+mOk}
+$('#mFact').onclick=()=>showMyth(true);$('#mMyth').onclick=()=>showMyth(false);
+$('#mNext').onclick=()=>{mI=(mI+1)%mList.length;drawMyth()};$('#mPrev').onclick=()=>{mI=(mI-1+mList.length)%mList.length;drawMyth()};
+$('#mLevel').onchange=mFilter;
+
+/* ---------- distribution simulator (hypothetical teaching model) ---------- */
+const PL={fb:'Facebook',ig:'Instagram',yt:'YouTube',tt:'TikTok',sc:'Snapchat',x:'X',wa:'WhatsApp'};
+const FMT={fb:['Reel','منشور + رابط','Live','Stories'],ig:['Reel','Carousel','Stories','Live'],yt:['فيديو طويل','Short','Live','Post'],tt:['فيديو قصير','Photo mode','LIVE'],sc:['Stories','Spotlight'],x:['Post عاجل','Thread','Video','Spaces'],wa:['رسالة قناة','Status','رسالة مجتمع']};
+const POOL={fb:90000,ig:80000,yt:70000,tt:100000,sc:40000,x:50000,wa:30000};
+const SCEN=[
+ {id:'brk',n:'عاجل: فيضان يغلق طريقاً رئيسياً صباح اليوم',g:'الهدف: إبلاغ أكبر عدد من المتأثرين بسرعة ودقة، وتوجيههم لمتابعة التحديثات.',w:{reach:.5,ret:.1,val:.1,click:.3},
+  plat:{x:1,wa:1,fb:.8,ig:.6,sc:.7,tt:.6,yt:.3},
+  fmt:{'Post عاجل':1,'رسالة قناة':1,'Stories':.8,'Reel':.7,'فيديو قصير':.7,'Live':.7,'منشور + رابط':.7,'Thread':.6,'Spotlight':.6,'Video':.8,'Status':.6,'رسالة مجتمع':.8,'Carousel':.4,'فيديو طويل':.2,'Short':.6,'Post':.3,'Photo mode':.4,'LIVE':.6,'Spaces':.3},
+  time:{now:1,hour:.6,eve:.3,next:.1},cta:{follow:1,full:.6,save:.5,none:.4}},
+ {id:'inv',n:'تحقيق: تلوث مياه الشرب في حي سكني (فيلم 18 د + مقال)',g:'الهدف: أن يشاهد/يقرأ الجمهور القصة الكاملة ويفهم الأدلة.',w:{reach:.2,ret:.35,val:.2,click:.25},
+  plat:{yt:1,fb:.8,x:.8,ig:.7,tt:.7,wa:.8,sc:.3},
+  fmt:{'فيديو طويل':1,'Thread':.9,'Carousel':.9,'Reel':.7,'فيديو قصير':.7,'Short':.7,'رسالة قناة':.8,'منشور + رابط':.8,'Live':.6,'Post عاجل':.4,'Stories':.5,'Spotlight':.3,'Video':.6,'Status':.4,'رسالة مجتمع':.8,'Post':.5,'Photo mode':.6,'LIVE':.4,'Spaces':.7},
+  time:{now:.6,hour:.6,eve:1,next:.7},cta:{full:1,save:.7,follow:.5,none:.3}},
+ {id:'doc',n:'وثائقي: آخر حرفيي النحاس في المدينة القديمة',g:'الهدف: جذب جمهور جديد مهتم بالثقافة ودفعه لمشاهدة الفيلم.',w:{reach:.35,ret:.3,val:.25,click:.1},
+  plat:{ig:1,tt:1,yt:1,fb:.7,sc:.6,x:.4,wa:.5},
+  fmt:{'Reel':1,'فيديو قصير':1,'فيديو طويل':.9,'Short':.9,'Carousel':.8,'Spotlight':.8,'Stories':.6,'Photo mode':.8,'Live':.4,'منشور + رابط':.5,'Post عاجل':.2,'Thread':.4,'رسالة قناة':.5,'Video':.6,'Status':.4,'رسالة مجتمع':.4,'Post':.5,'LIVE':.4,'Spaces':.3},
+  time:{now:.6,hour:.6,eve:1,next:.8},cta:{full:1,save:.8,follow:.7,none:.3}},
+];
+const OPEN={hook:1,ctx:.85,logo:.35,bait:.7}, PACK={native:1,tv:.45,link:.6};
+const isText=(p,f)=>(p==='x'&&f!=='Video')||p==='wa'||f==='منشور + رابط'||f==='Thread';
+let sLogArr=[];
+function fillSim(){$('#sScen').innerHTML=SCEN.map((s,i)=>`<option value="${i}">${s.n}</option>`).join('');
+  $('#sPlat').innerHTML=Object.entries(PL).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');fillFmt();$('#sGoal').textContent=SCEN[0].g}
+function fillFmt(){const p=$('#sPlat').value;$('#sFmt').innerHTML=FMT[p].map(f=>`<option>${f}</option>`).join('')}
+$('#sPlat').onchange=fillFmt;$('#sScen').onchange=()=>{$('#sGoal').textContent=SCEN[$('#sScen').value].g;sLogArr=[];drawLog()};
+function simulate(){const S=SCEN[$('#sScen').value],p=$('#sPlat').value,f=$('#sFmt').value,t=$('#sTime').value,o=$('#sOpen').value,k=$('#sPack').value,c=$('#sCta').value;
+  let pack=PACK[k]; if(k==='link'&&isText(p,f))pack=.95; if(k==='native'&&isText(p,f))pack=.9;
+  const pf=S.plat[p],ff=S.fmt[f]??.5,tf=S.time[t],of=OPEN[o],cf=S.cta[c];
+  const reach=POOL[p]*pf*(.35+.65*of)*pack*(.4+.6*tf)*(.6+.4*ff);
+  let ret=Math.min(85,12+60*of*pack*ff*(o==='bait'?.55:1));
+  const val=Math.min(12,(1.5+8*ff*cf)*(o==='bait'?.4:1)*(k==='tv'?.6:1));
+  const click=reach*(c==='full'?.04:c==='follow'?.015:.01)*(o==='bait'?.6:1)*ff;
+  const norm={reach:Math.min(1,reach/70000),ret:ret/85,val:val/12,click:Math.min(1,click/2500)};
+  const score=Math.round(100*(S.w.reach*norm.reach+S.w.ret*norm.ret+S.w.val*norm.val+S.w.click*norm.click));
+  const why=[];
+  why.push(pf>=.9?`<span class="good">${PL[p]} منصة مناسبة جداً لهذه المهمة.</span>`:pf>=.7?`<span class="warn">${PL[p]} مناسبة جزئياً لهذه المهمة.</span>`:`<span class="bad">${PL[p]} ليست المكان الأفضل لهذه المهمة.</span>`);
+  why.push(ff>=.9?`الفورمات (${f}) يخدم هدف القصة.`:ff>=.6?`الفورمات (${f}) مقبول لكن هناك ما هو أنسب.`:`<span class="bad">الفورمات (${f}) لا يناسب هذه القصة.</span>`);
+  if(o==='logo')why.push('<span class="bad">الشعار والمقدمة يخسران جمهوراً كبيراً في الثواني الأولى.</span>');
+  if(o==='bait')why.push('<span class="bad">العنوان الغامض جذب نقرات لكنه خفّض الثقة والحفظ والاحتفاظ، وقد يخفض توزيعك على بعض المنصات.</span>');
+  if(o==='ctx')why.push('جملة السياق تساعد غير المتابعين على فهم القصة.');
+  if(o==='hook')why.push('<span class="good">Hook قوي في البداية رفع الاحتفاظ.</span>');
+  if(k==='tv'&&!isText(p,f))why.push('<span class="bad">ملف التلفزيون الأفقي بشعاره لا يناسب واجهة المنصة.</span>');
+  if(k==='link'&&!isText(p,f))why.push('<span class="warn">رابط وحده على منصة بصرية يقلل التوقف والتفاعل.</span>');
+  if(tf<=.3)why.push('<span class="bad">التوقيت متأخر جداً بالنسبة لطبيعة القصة.</span>');
+  if(cf>=.9)why.push('<span class="good">الـCTA يخدم هدف المهمة.</span>');else if(c==='none')why.push('<span class="warn">بدون CTA لا يعرف الجمهور الخطوة التالية.</span>');
+  return {S,p,f,t,reach,ret,val,click,score,why}}
+const TL={now:'فوراً',hour:'+1 ساعة',eve:'المساء',next:'اليوم التالي'};
+let last=null;
+$('#sRun').onclick=()=>{const r=simulate();last=r;
+  $('#sKpi').innerHTML=`<div><small>الوصول</small><b>${fmt(r.reach)}</b></div><div><small>متوسط الاحتفاظ</small><b>${Math.round(r.ret)}%</b></div><div><small>نسبة الحفظ والمشاركة إلى الوصول</small><b>${r.val.toFixed(1)}%</b></div><div><small>نقرات للقصة الكاملة</small><b>${fmt(r.click)}</b></div><div><small>درجة المهمة</small><b>${r.score}/100</b></div>`;
+  $('#sBars').innerHTML=`<label>درجة المهمة</label><div class="bar"><span style="width:${r.score}%"></span></div>`;
+  $('#sWhy').innerHTML=r.why.map(w=>`<li>${w}</li>`).join('')};
+$('#sLog').onclick=()=>{if(!last)$('#sRun').click();sLogArr.push(last);const n=sLogArr.length;if(n<=6)award('sim-'+$('#sScen').value+'-'+n,Math.round(last.score/10),'max');drawLog()};
+function drawLog(){$('#sTable').innerHTML=sLogArr.map(r=>`<tr><td>${PL[r.p]}</td><td>${r.f}</td><td>${TL[r.t]}</td><td class="num">${fmt(r.reach)}</td><td class="num">${Math.round(r.ret)}%</td><td class="num">${r.score}</td></tr>`).join('');
+  const plats=new Set(sLogArr.map(r=>r.p)).size,avg=sLogArr.length?Math.round(sLogArr.reduce((a,r)=>a+r.score,0)/sLogArr.length):0;
+  $('#sTotal').textContent=sLogArr.length?`عدد الأصول: ${sLogArr.length} · منصات مختلفة: ${plats} · متوسط الدرجة: ${avg}. خطة جيدة = منصات مختارة بعناية بدرجات عالية، لا كل المنصات بأي شكل.`:''}
+
+/* ---------- ad budget game ---------- */
+const AD={ // hypothetical CPM and result rates per 1000 impressions by objective
+ 'Meta (FB/IG)':{cpm:4,awareness:0,views:120,traffic:9,leads:1.2,engage:25},
+ 'YouTube':{cpm:6,awareness:0,views:200,traffic:5,leads:.5,engage:8},
+ 'TikTok':{cpm:5,awareness:0,views:150,traffic:6,leads:.8,engage:30},
+ 'Snapchat':{cpm:3,awareness:0,views:90,traffic:5,leads:.6,engage:12},
+ 'X':{cpm:5,awareness:0,views:70,traffic:7,leads:.4,engage:18},
+ 'Click-to-WhatsApp':{cpm:4.5,awareness:0,views:0,traffic:4,leads:3,engage:4}};
+const OBJ={awareness:'Awareness/Reach',views:'Video views',traffic:'Traffic',leads:'Leads/Messages',engage:'Engagement'};
+const MIS=[
+ {n:'إطلاق وثائقي: أكبر عدد من المشاهدات المؤهلة للـTrailer',goal:'views',fit:{'YouTube':1,'TikTok':.9,'Meta (FB/IG)':.9,'Snapchat':.7,'X':.6,'Click-to-WhatsApp':0}},
+ {n:'تحقيق: أكبر عدد من الزيارات للمقال الكامل على الموقع',goal:'traffic',fit:{'Meta (FB/IG)':1,'X':.9,'TikTok':.7,'YouTube':.6,'Snapchat':.6,'Click-to-WhatsApp':.5}},
+ {n:'نمو قناة WhatsApp: أكبر عدد من المحادثات/الاشتراكات',goal:'leads',fit:{'Click-to-WhatsApp':1,'Meta (FB/IG)':.8,'TikTok':.5,'Snapchat':.5,'X':.4,'YouTube':.3}},
+];
+let lines=[{p:'Meta (FB/IG)',o:'views',b:200},{p:'YouTube',o:'views',b:200},{p:'X',o:'engage',b:100}];
+function fillAds(){$('#aMission').innerHTML=MIS.map((m,i)=>`<option value="${i}">${m.n}</option>`).join('');drawLines();
+  $('#aAssume').innerHTML='<table><thead><tr><th>المنصة</th><th>CPM</th>'+Object.values(OBJ).slice(1).map(o=>`<th>${o} لكل 1000 ظهور</th>`).join('')+'</tr></thead><tbody>'+Object.entries(AD).map(([k,v])=>`<tr><td>${k}</td><td>$${v.cpm}</td><td>${v.views}</td><td>${v.traffic}</td><td>${v.leads}</td><td>${v.engage}</td></tr>`).join('')+'</tbody></table>'}
+function drawLines(){const box=$('#aLines');box.innerHTML='';lines.forEach((l,i)=>{const d=document.createElement('div');d.className='card';d.style.marginTop='10px';d.style.background='var(--panel2)';
+  d.innerHTML=`<div class="row" style="justify-content:space-between"><b>حملة ${i+1}</b><button class="btn sm ghost" aria-label="حذف الحملة">✕</button></div>
+  <div class="grid g2" style="gap:8px"><div><label for="ap${i}">المنصة</label><select id="ap${i}">${Object.keys(AD).map(k=>`<option ${k===l.p?'selected':''}>${k}</option>`).join('')}</select></div>
+  <div><label for="ao${i}">الهدف</label><select id="ao${i}">${Object.entries(OBJ).map(([k,v])=>`<option value="${k}" ${k===l.o?'selected':''}>${v}</option>`).join('')}</select></div></div>
+  <label for="ab${i}">الميزانية: <span class="num" id="abv${i}">$${l.b}</span></label><input type="range" min="0" max="500" step="25" value="${l.b}" id="ab${i}" style="width:100%">`;
+  d.querySelector('button').onclick=()=>{lines.splice(i,1);drawLines()};
+  d.querySelector('#ap'+i).onchange=e=>{l.p=e.target.value};d.querySelector('#ao'+i).onchange=e=>{l.o=e.target.value};
+  d.querySelector('#ab'+i).oninput=e=>{l.b=+e.target.value;d.querySelector('#abv'+i).textContent='$'+l.b;left()};
+  box.appendChild(d)});
+  if(lines.length<4){const b=document.createElement('button');b.className='btn sm';b.style.marginTop='10px';b.textContent='+ حملة';b.onclick=()=>{lines.push({p:'TikTok',o:'views',b:0});drawLines()};box.appendChild(b)}left()}
+function left(){const sp=lines.reduce((a,l)=>a+l.b,0);$('#aLeft').innerHTML=sp>500?`<span class="bad">تجاوزت الميزانية: $${sp} من $500</span>`:`المتبقي: $${500-sp}`;$('#aRun').disabled=sp>500}
+$('#aMission').onchange=()=>{$('#aGoal').textContent='المقياس الذي يُحسب: '+OBJ[MIS[$('#aMission').value].goal]};
+$('#aRun').onclick=()=>{const M=MIS[$('#aMission').value];let total=0,why=[];const rows=lines.filter(l=>l.b>0).map(l=>{const a=AD[l.p];
+   const eff=150*(1-Math.exp(-l.b/150)); // diminishing returns
+   const imp=eff/a.cpm*1000; const match=l.o===M.goal; const raw=a[M.goal]*imp/1000*M.fit[l.p]*(match?1:.12);
+   const own=l.o==='awareness'?imp:a[l.o]*imp/1000; total+=raw;
+   if(!match)why.push(`<span class="bad">حملة ${l.p} بهدف ${OBJ[l.o]}: النظام حسّن نحو ${OBJ[l.o]} لا نحو ${OBJ[M.goal]}، فجاءت النتائج رخيصة لكنها لا تخدم المهمة.</span>`);
+   if(M.fit[l.p]<.5)why.push(`<span class="warn">${l.p} ليست الأنسب لهذه المهمة.</span>`);
+   if(l.b>=350)why.push(`<span class="warn">وضعت معظم الميزانية في حملة واحدة (${l.p}): العائد يتناقص مع زيادة الإنفاق في الحملة نفسها.</span>`);
+   return `<tr><td>${l.p} · ${OBJ[l.o]}</td><td class="num">$${l.b}</td><td class="num">${fmt(imp)}</td><td class="num">$${a.cpm}</td><td class="num">${fmt(own)} ${l.o==='awareness'?'ظهور':OBJ[l.o]}</td><td>${match?'<span class="good">نعم</span>':'<span class="bad">لا</span>'}</td></tr>`});
+  $('#aTable').innerHTML=rows.join('')||'<tr><td colspan="6">لا توجد حملات بميزانية.</td></tr>';
+  const spent=lines.reduce((a,l)=>a+l.b,0);
+  $('#aKpi').innerHTML=`<div><small>الإنفاق</small><b>$${spent}</b></div><div><small>${OBJ[M.goal]} المحققة للمهمة</small><b>${fmt(total)}</b></div><div><small>التكلفة لكل نتيجة</small><b>${total?'$'+(spent/total).toFixed(2):'—'}</b></div>`;
+  if(!why.length)why.push('<span class="good">الأهداف مطابقة للمهمة والإنفاق موزّع. قارنوا التكلفة لكل نتيجة بين الفرق.</span>');
+  const mism=lines.filter(l=>l.b>0&&l.o!==M.goal).length,conc=lines.some(l=>l.b>=350)?2:0,low=lines.some(l=>l.b>0&&M.fit[l.p]<.5)?2:0;const pts=Math.max(0,10-4*mism-conc-low);if(spent>0)award('ads-'+$('#aMission').value,pts,'max');why.push(`<b>نقاط هذه المحاولة: ${pts} من 10</b> (تُحتسب أفضل محاولة لكل مهمة)`);$('#aWhy').innerHTML=why.map(w=>`<li>${w}</li>`).join('')};
+
+/* ---------- metric challenge ---------- */
+const R=(a,b,s=1)=>Math.round((a+Math.random()*(b-a))/s)*s;
+const QT=[
+ ()=>{const r=R(8000,40000,100),i=Math.round(r*(1.2+Math.random()));return{t:'Frequency',q:`منشور وصل إلى ${fmt(r)} حساب، وحقق ${fmt(i)} ظهور. ما الـFrequency؟`,a:i/r,u:'مرة',e:`Impressions ÷ Reach = ${fmt(i)} ÷ ${fmt(r)}`}},
+ ()=>{const r=R(10000,60000,500),e=R(300,4000,10);return{t:'Engagement Rate',q:`${fmt(e)} تفاعل و${fmt(r)} وصول. ما معدل التفاعل بالقسمة على الوصول؟`,a:e/r*100,u:'%',e:`${fmt(e)} ÷ ${fmt(r)} × 100`}},
+ ()=>{const i=R(20000,200000,1000),c=R(200,4000,10);return{t:'CTR',q:`ظهر الإعلان ${fmt(i)} مرة وحصل على ${fmt(c)} نقرة. ما CTR؟`,a:c/i*100,u:'%',e:`${fmt(c)} ÷ ${fmt(i)} × 100`}},
+ ()=>{const s=R(100,900,10),i=R(40000,300000,1000);return{t:'CPM',q:`أنفقت $${s} وحققت ${fmt(i)} ظهور. ما CPM؟`,a:s/i*1000,u:'$',e:`${s} ÷ ${fmt(i)} × 1000`}},
+ ()=>{const s=R(100,900,10),c=R(300,5000,10);return{t:'CPC',q:`أنفقت $${s} وحصلت على ${fmt(c)} نقرة. ما CPC؟`,a:s/c,u:'$',e:`${s} ÷ ${fmt(c)}`}},
+ ()=>{const s=R(100,900,10),v=R(5000,60000,100);return{t:'CPV',q:`أنفقت $${s} وحققت ${fmt(v)} مشاهدة مؤهلة. ما CPV؟`,a:s/v,u:'$',e:`${s} ÷ ${fmt(v)}`}},
+ ()=>{const v=R(5000,80000,100),c=Math.round(v*(.05+Math.random()*.4));return{t:'Completion Rate',q:`فيديو حقق ${fmt(v)} مشاهدة، وأكمله ${fmt(c)} مشاهد. ما نسبة الإكمال؟`,a:c/v*100,u:'%',e:`${fmt(c)} ÷ ${fmt(v)} × 100`}},
+ ()=>{const v=R(2000,40000,100),h=R(50,900,5);return{t:'Average View Duration',q:`وقت المشاهدة الإجمالي ${fmt(h)} ساعة، والمشاهدات ${fmt(v)}. ما متوسط مدة المشاهدة بالثواني؟`,a:h*3600/v,u:'ثانية',e:`${fmt(h)} × 3600 ÷ ${fmt(v)}`}},
+ ()=>{const f=R(20000,200000,1000),n=R(500,6000,10),u=R(50,800,10);return{t:'Follower Growth',q:`بدأ الشهر بـ${fmt(f)} متابع، وأضاف ${fmt(n)} متابعاً جديداً، وألغى المتابعة ${fmt(u)}. ما معدل النمو الصافي؟`,a:(n-u)/f*100,u:'%',e:`(${fmt(n)} − ${fmt(u)}) ÷ ${fmt(f)} × 100`}},
+];
+let cur=null,qOk=0,qAll=0;
+function newQ(){cur=QT[Math.floor(Math.random()*QT.length)]();$('#qType').textContent=cur.t;$('#qText').textContent=cur.q;$('#qUnit').textContent=cur.u;$('#qAns').value='';$('#qOut').innerHTML=''}
+$('#qNew').onclick=newQ;
+$('#qCheck').onclick=()=>{const v=parseFloat($('#qAns').value);if(isNaN(v))return;qAll++;const ok=Math.abs(v-cur.a)<=Math.max(.06,Math.abs(cur.a)*.02);if(ok){qOk++;if(Object.keys(me.done).filter(k=>k.startsWith('calc-')).length<10)award('calc-'+Date.now(),3)}
+  $('#qScore').textContent=qOk+' / '+qAll;
+  $('#qOut').innerHTML=`<div class="verdict ${ok?'ok':'no'}"><b class="${ok?'good':'bad'}">${ok?'صحيح':'غير صحيح'}</b> · الجواب: <b class="num">${cur.a.toFixed(cur.u==='$'&&cur.a<1?3:1)} ${cur.u}</b><p style="margin:6px 0 0" class="num">${cur.e}</p></div>`};
+$('#qAns').addEventListener('keydown',e=>{if(e.key==='Enter')$('#qCheck').click()});
+
+/* ---------- retention detective ---------- */
+const RC=[
+ {n:'مقطع مقابلة مع وزير (60 ث)',d:'فيديو قصير من برنامج حواري.',pts:[100,58,52,50,48,47,46,45,44,43,42,41,40],drop:2,cause:'الهبوط الأكبر في الثواني الأولى: المقطع يبدأ بشعار البرنامج 6 ثوانٍ قبل أي كلام. الحل: ابدأ بأقوى جملة للضيف ونص على الشاشة.'},
+ {n:'Explainer اقتصادي (90 ث)',d:'شرح لقرار رفع الفائدة.',pts:[100,78,72,70,69,68,52,50,49,48,47,46,45,44,43,42,40,38,36],drop:30,cause:'هبوط حاد عند الثانية 30 تقريباً: هنا ينتقل الفيديو إلى جدول أرقام طويل بلا تعليق صوتي. الحل: قسّم الأرقام وأضف مثالاً شخصياً (قرض 100 ألف).'},
+ {n:'تقرير ميداني من موقع حريق (75 ث)',d:'تقرير مراسل من الميدان.',pts:[100,80,76,74,72,71,70,69,68,67,66,52,50,48,46,44],drop:55,cause:'الهبوط عند الثانية 55 تقريباً: المراسل يعيد تلخيص ما قاله في البداية. الحل: اختصر النهاية واختم بما يجب أن يفعله الناس (طرق بديلة، أرقام طوارئ).'},
+];
+let rI=0,rDone=false;
+function drawRet(){const c=RC[rI],W=640,H=260,P=34,n=c.pts.length,step=5;$('#rDesc').textContent=c.d+' كل نقطة = 5 ثوانٍ.';rDone=false;$('#rOut').innerHTML='';
+  const x=i=>P+(W-2*P)*i/(n-1),y=v=>H-P-(H-2*P)*v/100;
+  let g='';[0,25,50,75,100].forEach(v=>{g+=`<line x1="${P}" x2="${W-P}" y1="${y(v)}" y2="${y(v)}" stroke="#2a3a52"/><text x="${P-6}" y="${y(v)+4}" font-size="11" text-anchor="end">${v}%</text>`});
+  for(let i=0;i<n;i+=2)g+=`<text x="${x(i)}" y="${H-12}" font-size="11" text-anchor="middle">${i*step}ث</text>`;
+  const d=c.pts.map((v,i)=>(i?'L':'M')+x(i)+' '+y(v)).join(' ');
+  g+=`<path d="${d} L${x(n-1)} ${y(0)} L${x(0)} ${y(0)} Z" fill="#22b3a2" opacity=".15"/><path d="${d}" fill="none" stroke="#22b3a2" stroke-width="3"/>`;
+  g+='<g id="rMark"></g>';$('#rSvg').innerHTML=g;
+  $('#rSvg').onclick=ev=>{if(rDone)return;const pt=$('#rSvg').createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const p=pt.matrixTransform($('#rSvg').getScreenCTM().inverse());
+    const i=Math.max(0,Math.min(n-1,Math.round((p.x-P)/((W-2*P)/(n-1)))));const sec=i*step,ok=Math.abs(sec-c.drop)<=7;rDone=true;award('ret-'+rI,ok?5:0);
+    $('#rMark').innerHTML=`<line x1="${x(i)}" x2="${x(i)}" y1="${P}" y2="${H-P}" stroke="#f4a259" stroke-dasharray="4 4"/><line x1="${x(c.drop/step)}" x2="${x(c.drop/step)}" y1="${P}" y2="${H-P}" stroke="#e2364b"/>`;
+    $('#rOut').innerHTML=`<div class="verdict ${ok?'ok':'no'}"><b class="${ok?'good':'bad'}">${ok?'أحسنت!':'ليس تماماً'}</b> اخترت الثانية ${sec}، والهبوط الحاد عند ${c.drop} ثانية تقريباً (الخط الأحمر).<p style="margin:6px 0 0">${c.cause}</p></div>`}}
+$('#rCase').onchange=e=>{rI=+e.target.value;drawRet()};
+
+/* ---------- A/B ---------- */
+const AB=[
+ {q:'صورة مصغرة لفيديو تحقيق على YouTube',m:'المقياس المحدد مسبقاً: حصة وقت المشاهدة',A:'صورة وثيقة · CTR 4.2% · متوسط مشاهدة 6:10 · حصة وقت المشاهدة 44%',B:'وجه المراسلة · CTR 5.6% · متوسط مشاهدة 5:15 · حصة وقت المشاهدة 56%',w:'B',e:'B فازت بالمقياس المحدد (وقت المشاهدة). لاحظ انخفاض متوسط المدة قليلاً: راقبه في الاختبار التالي.'},
+ {q:'غلاف Carousel عن قانون الإيجار على Instagram',m:'المقياس: Saves ÷ Reach',A:'(6 تغييرات في قانون الإيجار) · Reach 30,000 · Saves 1,500 (5.0%)',B:'(هل يحق للمالك رفع إيجارك؟) · Reach 31,000 · Saves 1,520 (4.9%)',w:'0',e:'الفرق 0.1 نقطة فقط على عينتين متقاربتين: لا فرق واضح. لا تعلن فائزاً؛ اختبر متغيراً آخر.'},
+ {q:'Hook لفيديو قصير عن الوقود على TikTok',m:'المقياس: متوسط مدة المشاهدة',A:'يبدأ بلقطة محطة الوقود والسعر الجديد على الشاشة · متوسط 14 ث',B:'يبدأ بالمراسل يقول (أهلاً بكم…) · متوسط 7 ث',w:'A',e:'A ضاعفت متوسط المدة. البداية المباشرة بالمعلومة البصرية تتفوق على التحية.'},
+ {q:'عنوان رابط تحقيق على Facebook',m:'المقياس: النقرات التي بقيت أكثر من 30 ثانية في الصفحة',A:'(لن تصدق ما وجدناه في مياه الحي!) · نقرات 2,400 · بقي أكثر من 30 ث: 480',B:'(تحليل 12 عينة مياه من حي السلام: 7 تجاوزت الحد المسموح) · نقرات 1,600 · بقي أكثر من 30 ث: 900',w:'B',e:'A جذبت نقرات أكثر لكن معظمها خرج سريعاً (Clickbait). B فازت بالمقياس الصحيح. والأرقام في العنوان B افتراضية للتدريب.'},
+];
+let abI=0;
+function drawAB(){const c=AB[abI];$('#abN').textContent='تحدي '+(abI+1)+' / '+AB.length;$('#abMetric').textContent=c.m;$('#abQ').textContent=c.q;
+  $('#abV').innerHTML=`<div class="card" id="abA"><h3>A</h3><p>${c.A}</p></div><div class="card" id="abB"><h3>B</h3><p>${c.B}</p></div>`;$('#abOut').innerHTML=''}
+$$('[data-ab]').forEach(b=>b.onclick=()=>{const c=AB[abI],ok=b.dataset.ab===c.w;award('ab-'+abI,ok?5:0);$$('.abv .card').forEach(x=>x.classList.remove('pick'));if(c.w!=='0')$('#ab'+c.w).classList.add('pick');
+  $('#abOut').innerHTML=`<div class="verdict ${ok?'ok':'no'}"><b class="${ok?'good':'bad'}">${ok?'صحيح':'ليس صحيحاً'}</b> · الجواب: ${c.w==='0'?'لا فرق واضح':c.w+' فازت'}<p style="margin:6px 0 0">${c.e}</p></div>`});
+$('#abNext').onclick=()=>{abI=(abI+1)%AB.length;drawAB()};
+
+/* ---------- init ---------- */
+drawMe();mFilter();fillSim();fillAds();$('#aMission').onchange();newQ();
+$('#rCase').innerHTML=RC.map((c,i)=>`<option value="${i}">${c.n}</option>`).join('');drawRet();drawAB();
+route();
+})();
+</script>
+</body>
+</html>
